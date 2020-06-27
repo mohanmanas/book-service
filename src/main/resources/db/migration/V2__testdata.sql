@@ -1,0 +1,2 @@
+INSERT INTO book (book_id, book_name, author, price, published_year) VALUES (100, 'Getting Started with Spring Framework', 'Ashish Sarin', 449, 2012); 
+INSERT INTO book (book_id, book_name, author, price, published_year) VALUES (101, 'Spring in Action', 'Craig Walls', 800, 2005); 
