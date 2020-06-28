@@ -45,16 +45,21 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public void updateBook(Book book, int id) {
+	public boolean updateBook(Book book, int id) {
 		Optional<Book> optionalBook = bookRepository.findById(id);
 		Book bookEntity = optionalBook.isPresent() ? optionalBook.get() : null;
-		Book updatedBook = Book.builder()
-		.bookId(id)
-		.bookName(StringUtils.isEmpty(book.getBookName())?bookEntity.getBookName():book.getBookName())
-		.author(StringUtils.isEmpty(book.getAuthor())?bookEntity.getAuthor():book.getAuthor())
-		.price(Objects.isNull(book.getPrice())?bookEntity.getPrice():book.getPrice())
-		.publishedYear(Objects.isNull(book.getPublishedYear())?bookEntity.getPublishedYear():book.getPublishedYear())
-		.build();
-		bookRepository.save(updatedBook);
+		if(Objects.nonNull(bookEntity)) {
+			Book updatedBook = Book.builder()
+					.bookId(id)
+					.bookName(StringUtils.isEmpty(book.getBookName())?bookEntity.getBookName():book.getBookName())
+					.author(StringUtils.isEmpty(book.getAuthor())?bookEntity.getAuthor():book.getAuthor())
+					.price(Objects.isNull(book.getPrice())?bookEntity.getPrice():book.getPrice())
+					.publishedYear(Objects.isNull(book.getPublishedYear())?bookEntity.getPublishedYear():book.getPublishedYear())
+					.build();
+					bookRepository.save(updatedBook);
+					return true;
+		} else {
+			return false;
+		}
 	}
 }

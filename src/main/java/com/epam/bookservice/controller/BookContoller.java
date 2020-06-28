@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -66,7 +67,11 @@ public class BookContoller {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Object> updateStudent(@RequestBody Book book, @PathVariable int id) {
-		bookService.updateBook(book, id);
-		return ResponseEntity.noContent().build();
+		boolean isUpdated = bookService.updateBook(book, id);
+		if(isUpdated) {
+			return ResponseEntity.ok().build();
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+		}	
 	}
 }
