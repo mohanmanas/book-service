@@ -1,7 +1,8 @@
-package com.epam.bookservice.model;
+package com.jpop.bookservice.model;
 
 
 import java.math.BigDecimal;
+
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

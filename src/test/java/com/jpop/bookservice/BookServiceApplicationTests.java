@@ -1,4 +1,4 @@
-package com.epam.bookservice;
+package com.jpop.bookservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

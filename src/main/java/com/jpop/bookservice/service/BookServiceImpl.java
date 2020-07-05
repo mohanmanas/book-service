@@ -1,6 +1,7 @@
-package com.epam.bookservice.service;
+package com.jpop.bookservice.service;
 
 import java.util.List;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -8,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.epam.bookservice.model.Book;
-import com.epam.bookservice.repository.BookRepository;
+import com.jpop.bookservice.model.Book;
+import com.jpop.bookservice.repository.BookRepository;
 
 
 @Service

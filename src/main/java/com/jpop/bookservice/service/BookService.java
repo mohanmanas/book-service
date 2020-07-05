@@ -1,9 +1,7 @@
-package com.epam.bookservice.service;
+package com.jpop.bookservice.service;
 
 import java.util.List;
-
-
-import com.epam.bookservice.model.Book;
+import com.jpop.bookservice.model.Book;
 
 public interface BookService {
 

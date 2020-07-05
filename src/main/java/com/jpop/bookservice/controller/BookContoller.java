@@ -1,6 +1,7 @@
-package com.epam.bookservice.controller;
+package com.jpop.bookservice.controller;
 
 import java.net.URI;
+
 
 import java.util.List;
 import java.util.Objects;
@@ -8,6 +9,7 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.epam.bookservice.model.Book;
-import com.epam.bookservice.service.BookService;
+import com.jpop.bookservice.model.Book;
+import com.jpop.bookservice.service.BookService;
 
 @RestController
 @RequestMapping(value="/books")
@@ -38,7 +40,7 @@ public class BookContoller {
 		} else {
 			response =  bookService.getAllBooksByName(bookName);
 		}
-		return ResponseEntity.ok().body(response);
+		return CollectionUtils.isEmpty(response)?new ResponseEntity<>(null, HttpStatus.NOT_FOUND):ResponseEntity.ok().body(response);
 	}
 	
 	@GetMapping("/{id}")
@@ -66,7 +68,7 @@ public class BookContoller {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> updateStudent(@RequestBody Book book, @PathVariable int id) {
+	public ResponseEntity<Object> updateBook(@RequestBody Book book, @PathVariable int id) {
 		boolean isUpdated = bookService.updateBook(book, id);
 		if(isUpdated) {
 			return ResponseEntity.ok().build();

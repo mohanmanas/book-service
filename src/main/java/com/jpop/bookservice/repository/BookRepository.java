@@ -1,11 +1,8 @@
-package com.epam.bookservice.repository;
+package com.jpop.bookservice.repository;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-
-
-import com.epam.bookservice.model.Book;
+import com.jpop.bookservice.model.Book;
 
 public interface BookRepository extends JpaRepository<Book, Integer> {
 	
