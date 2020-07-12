@@ -1,19 +1,21 @@
 package com.jpop.bookservice.service;
 
 import java.util.List;
+
+import com.jpop.bookservice.dto.BookDto;
 import com.jpop.bookservice.model.Book;
 
 public interface BookService {
 
-	public List<Book> getAllBooks();
+	public List<BookDto> getAllBooks();
 
-	public Book createBook(Book book);
+	public BookDto createBook(BookDto bookDto);
 
-	public Book getBookById(int id);
+	public BookDto getBookById(int id);
 
 	public void deleteBook(int id);
 
-	public boolean updateBook(Book book, int id);
+	public boolean updateBook(BookDto bookDto, int id);
 
-	public List<Book> getAllBooksByName(String bookName);
+	public List<BookDto> getAllBooksByName(String bookName);
 }

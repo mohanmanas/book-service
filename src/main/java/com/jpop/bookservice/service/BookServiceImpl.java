@@ -4,11 +4,13 @@ import java.util.List;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.jpop.bookservice.dto.BookDto;
 import com.jpop.bookservice.model.Book;
 import com.jpop.bookservice.repository.BookRepository;
 
@@ -20,24 +22,26 @@ public class BookServiceImpl implements BookService{
 	private BookRepository bookRepository;
 
 	@Override
-	public List<Book> getAllBooks() {
-		return bookRepository.findAll();
+	public List<BookDto> getAllBooks() {
+		List<Book> booksList= bookRepository.findAll();
+		return booksList.stream().map(BookDto::toBookDto).collect(Collectors.toList());
 	}
 	
 	@Override
-	public Book getBookById(int id) {
+	public BookDto getBookById(int id) {
 		Optional<Book> optionalBook = bookRepository.findById(id);
-		return optionalBook.isPresent() ? optionalBook.get(): null ;
+		return optionalBook.isPresent() ? BookDto.toBookDto(optionalBook.get()): null ;
 	}
 	
 	@Override
-	public List<Book> getAllBooksByName(String bookName) {
-		return bookRepository.findByBookNameContains(bookName);
+	public List<BookDto> getAllBooksByName(String bookName) {
+		List<Book> booksList= bookRepository.findByBookNameContains(bookName);
+		return booksList.stream().map(BookDto::toBookDto).collect(Collectors.toList());
 	}
 	
 	@Override
-	public Book createBook(Book book) {
-		return bookRepository.save(book);
+	public BookDto createBook(BookDto bookDto) {
+		return BookDto.toBookDto(bookRepository.save(BookDto.fromBookDto(bookDto)));
 	}
 	
 	@Override
@@ -46,16 +50,16 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public boolean updateBook(Book book, int id) {
+	public boolean updateBook(BookDto bookDto, int id) {
 		Optional<Book> optionalBook = bookRepository.findById(id);
 		Book bookEntity = optionalBook.isPresent() ? optionalBook.get() : null;
 		if(Objects.nonNull(bookEntity)) {
 			Book updatedBook = Book.builder()
 					.bookId(id)
-					.bookName(StringUtils.isEmpty(book.getBookName())?bookEntity.getBookName():book.getBookName())
-					.author(StringUtils.isEmpty(book.getAuthor())?bookEntity.getAuthor():book.getAuthor())
-					.price(Objects.isNull(book.getPrice())?bookEntity.getPrice():book.getPrice())
-					.publishedYear(Objects.isNull(book.getPublishedYear())?bookEntity.getPublishedYear():book.getPublishedYear())
+					.bookName(StringUtils.isEmpty(bookDto.getBookName())?bookEntity.getBookName():bookDto.getBookName())
+					.author(StringUtils.isEmpty(bookDto.getAuthor())?bookEntity.getAuthor():bookDto.getAuthor())
+					.price(Objects.isNull(bookDto.getPrice())?bookEntity.getPrice():bookDto.getPrice())
+					.publishedYear(Objects.isNull(bookDto.getPublishedYear())?bookEntity.getPublishedYear():bookDto.getPublishedYear())
 					.build();
 					bookRepository.save(updatedBook);
 					return true;
