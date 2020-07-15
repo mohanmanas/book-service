@@ -6,13 +6,17 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.math.exception.NoDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.jpop.bookservice.dto.BookDto;
+import com.jpop.bookservice.exception.BookNotFoundException;
 import com.jpop.bookservice.model.Book;
 import com.jpop.bookservice.repository.BookRepository;
+import com.jpop.userservice.exception.UserNotFoundException;
 
 
 @Service
@@ -24,24 +28,41 @@ public class BookServiceImpl implements BookService{
 	@Override
 	public List<BookDto> getAllBooks() {
 		List<Book> booksList= bookRepository.findAll();
-		return booksList.stream().map(BookDto::toBookDto).collect(Collectors.toList());
+		if(CollectionUtils.isNotEmpty(booksList)) {
+			return booksList.stream().map(BookDto::toBookDto).collect(Collectors.toList());
+		} else {
+			throw new NoDataException();
+		}
 	}
 	
 	@Override
 	public BookDto getBookById(int id) {
 		Optional<Book> optionalBook = bookRepository.findById(id);
-		return optionalBook.isPresent() ? BookDto.toBookDto(optionalBook.get()): null ;
+		if(optionalBook.isPresent()) {
+			return optionalBook.isPresent() ? BookDto.toBookDto(optionalBook.get()): null ;
+		}else {
+			throw new BookNotFoundException(id);
+		}
 	}
 	
 	@Override
 	public List<BookDto> getAllBooksByName(String bookName) {
 		List<Book> booksList= bookRepository.findByBookNameContains(bookName);
-		return booksList.stream().map(BookDto::toBookDto).collect(Collectors.toList());
+		if(CollectionUtils.isNotEmpty(booksList)) {
+			return booksList.stream().map(BookDto::toBookDto).collect(Collectors.toList());
+		} else {
+			throw new NoDataException();
+		}
 	}
 	
 	@Override
 	public BookDto createBook(BookDto bookDto) {
-		return BookDto.toBookDto(bookRepository.save(BookDto.fromBookDto(bookDto)));
+		Optional<Book> optionalBook = bookRepository.findById(bookDto.getBookId());
+		if(!optionalBook.isPresent()) {
+			return BookDto.toBookDto(bookRepository.save(BookDto.fromBookDto(bookDto)));
+		} else {
+			throw new RuntimeException();
+		}
 	}
 	
 	@Override
@@ -50,21 +71,12 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public boolean updateBook(BookDto bookDto, int id) {
+	public void updateBook(BookDto bookDto, int id) {
 		Optional<Book> optionalBook = bookRepository.findById(id);
-		Book bookEntity = optionalBook.isPresent() ? optionalBook.get() : null;
-		if(Objects.nonNull(bookEntity)) {
-			Book updatedBook = Book.builder()
-					.bookId(id)
-					.bookName(StringUtils.isEmpty(bookDto.getBookName())?bookEntity.getBookName():bookDto.getBookName())
-					.author(StringUtils.isEmpty(bookDto.getAuthor())?bookEntity.getAuthor():bookDto.getAuthor())
-					.price(Objects.isNull(bookDto.getPrice())?bookEntity.getPrice():bookDto.getPrice())
-					.publishedYear(Objects.isNull(bookDto.getPublishedYear())?bookEntity.getPublishedYear():bookDto.getPublishedYear())
-					.build();
-					bookRepository.save(updatedBook);
-					return true;
+		if(optionalBook.isPresent()) {
+			bookRepository.save(BookDto.fromBookDto(bookDto));
 		} else {
-			return false;
+			throw new BookNotFoundException(id);
 		}
 	}
 }

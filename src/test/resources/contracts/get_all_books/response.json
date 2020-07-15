@@ -1,0 +1,16 @@
+[
+  {
+    "bookId": 100,
+    "bookName": "book",
+    "author": "Camille",
+    "price": 1000,
+    "publishedYear": 2015
+  },
+  {
+    "bookId": 101,
+    "bookName": "Book1",
+    "author": "Davina",
+    "price": 500,
+    "publishedYear": 1996
+  }
+]

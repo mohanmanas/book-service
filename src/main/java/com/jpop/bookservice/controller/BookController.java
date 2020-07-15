@@ -1,6 +1,7 @@
 package com.jpop.bookservice.controller;
 
 import java.net.URI;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jpop.bookservice.dto.BookDto;
-import com.jpop.bookservice.model.Book;
 import com.jpop.bookservice.service.BookService;
 
 @RestController
@@ -43,10 +43,14 @@ public class BookController {
 	
 	@PostMapping
 	public ResponseEntity<BookDto> createBook(@RequestBody BookDto bookDto) {
-		BookDto response =  bookService.createBook(bookDto);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(response.getBookId()).toUri();
-		return ResponseEntity.created(location).build();
+		try {
+			BookDto response =  bookService.createBook(bookDto);
+			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+					.buildAndExpand(response.getBookId()).toUri();
+			return ResponseEntity.created(location).build();
+		} catch(Exception exception) {
+			return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+		}
 	}
 	
 	@DeleteMapping("/{id}")
@@ -57,11 +61,7 @@ public class BookController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<BookDto> updateBook(@RequestBody BookDto bookDto, @PathVariable int id) {
-		boolean isUpdated = bookService.updateBook(bookDto, id);
-		if(isUpdated) {
-			return ResponseEntity.ok().build();
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-		}	
+		bookService.updateBook(bookDto, id);
+		return ResponseEntity.noContent().build();	
 	}
 }
