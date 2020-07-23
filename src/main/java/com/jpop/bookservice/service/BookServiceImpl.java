@@ -2,21 +2,17 @@ package com.jpop.bookservice.service;
 
 import java.util.List;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.math.exception.NoDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import com.jpop.bookservice.dto.BookDto;
 import com.jpop.bookservice.exception.BookNotFoundException;
 import com.jpop.bookservice.model.Book;
 import com.jpop.bookservice.repository.BookRepository;
-import com.jpop.userservice.exception.UserNotFoundException;
 
 
 @Service
@@ -28,7 +24,7 @@ public class BookServiceImpl implements BookService{
 	@Override
 	public List<BookDto> getAllBooks() {
 		List<Book> booksList= bookRepository.findAll();
-		if(CollectionUtils.isNotEmpty(booksList)) {
+		if(!CollectionUtils.isEmpty(booksList)) {
 			return booksList.stream().map(BookDto::toBookDto).collect(Collectors.toList());
 		} else {
 			throw new NoDataException();
@@ -48,7 +44,7 @@ public class BookServiceImpl implements BookService{
 	@Override
 	public List<BookDto> getAllBooksByName(String bookName) {
 		List<Book> booksList= bookRepository.findByBookNameContains(bookName);
-		if(CollectionUtils.isNotEmpty(booksList)) {
+		if(!CollectionUtils.isEmpty(booksList)) {
 			return booksList.stream().map(BookDto::toBookDto).collect(Collectors.toList());
 		} else {
 			throw new NoDataException();

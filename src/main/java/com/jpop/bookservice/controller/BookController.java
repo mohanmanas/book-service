@@ -2,7 +2,11 @@ package com.jpop.bookservice.controller;
 
 import java.net.URI;
 
+
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +26,15 @@ import com.jpop.bookservice.service.BookService;
 @RestController
 @RequestMapping(value="/books")
 public class BookController {
+	
+	private static final Logger LOG = Logger.getLogger(BookController.class.getName());
 
 	@Autowired
 	BookService bookService;
 
 	@GetMapping
 	public List<BookDto> getAllBooks() {
+		LOG.log(Level.INFO, "fetching books from book api"); 
 		return bookService.getAllBooks();
 	}
 	
