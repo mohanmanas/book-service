@@ -18,7 +18,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleCityNotFoundException(BookNotFoundException ex, WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("message", "User not found");
+        body.put("message", "Book not found");
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
@@ -26,7 +26,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleNodataFoundException(NoDataFoundException ex, WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("message", "No Users found");
+        body.put("message", "No Books found");
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+    
+    @ExceptionHandler(NoStockException.class)
+    public ResponseEntity<Object> handleNoStockException(NoStockException ex, WebRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", "Book is out of stock");
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 }

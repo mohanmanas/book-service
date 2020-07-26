@@ -21,6 +21,10 @@ public class BookDto {
 	
 	private int publishedYear;
 	
+	private int bookCount;
+	
+	private BigDecimal pricePerDay;
+	
 	public static BookDto toBookDto(Book book) {
 		return BookDto.builder()
 				.bookId(book.getBookId())
@@ -28,6 +32,8 @@ public class BookDto {
 				.author(book.getAuthor())
 				.price(book.getPrice())
 				.publishedYear(book.getPublishedYear())
+				.bookCount(book.getBookCount())
+				.pricePerDay(book.getPricePerDay())
 				.build();
 	}
 	
@@ -38,6 +44,8 @@ public class BookDto {
 				.author(bookDto.getAuthor())
 				.price(bookDto.getPrice())
 				.publishedYear(bookDto.getPublishedYear())
+				.bookCount(bookDto.getBookCount())
+				.pricePerDay(bookDto.getPricePerDay())
 				.build();
 	}
 }

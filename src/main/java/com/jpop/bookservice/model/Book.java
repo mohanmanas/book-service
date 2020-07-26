@@ -2,7 +2,6 @@ package com.jpop.bookservice.model;
 
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
@@ -37,6 +36,10 @@ public class Book {
 	
 	private int publishedYear;
 	
+	private int bookCount;
+	
+	private BigDecimal pricePerDay;
+	
 	@CreatedBy
 	private String createdUser;
 	
@@ -51,4 +54,12 @@ public class Book {
 	
 	@Version
 	private long version;
+	
+	public void decrementBookCount() {
+		this.bookCount--;
+	}
+	
+	public void incrementBookCount() {
+		this.bookCount++;
+	}
 }
